@@ -70,4 +70,16 @@ describe "merchant bulk discount index" do
       expect(current_path).to eq("/merchant/#{@merchant1.id}/bulk_discounts/#{@bulk_discount_1.id}")
     end
   end
+
+  it "lists the name and date of the next 3 upcoming US holidays" do
+    within('#upcoming_holidays') do
+      expect(page).to have_content("Upcoming Holidays:")
+      expect(page).to have_content("Memorial Day")
+      expect(page).to have_content("2021-05-31")
+      expect(page).to have_content("Independence Day")
+      expect(page).to have_content("2021-07-05")
+      expect(page).to have_content("Labor Day")
+      expect(page).to have_content("2021-09-06")
+    end
+  end
 end

@@ -17,4 +17,13 @@
     <%end%>
   </section>
 
+
+
+  <section id='upcoming_holidays'>
+  <h4 >Upcoming Holidays:</h4>
+  <% @holidays.each do |name, date| %>
+    <p><%= name %>, <%= date %></p>
+  <% end %>
+  </section>
+
 </body>
