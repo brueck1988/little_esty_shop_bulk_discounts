@@ -5,10 +5,10 @@ describe "merchant bulk discount index" do
     @merchant1 = Merchant.create!(name: 'Hair Care')
     @merchant2 = Merchant.create!(name: 'Jewelry')
 
-    @bulk_discount_1 = BulkDiscount.create!(percentage_discount: 25, quantity_threshold: 10, merchant_id: @merchant1.id)
-    @bulk_discount_2 = BulkDiscount.create!(percentage_discount: 10, quantity_threshold: 5, merchant_id: @merchant1.id)
+    @bulk_discount_1 = BulkDiscount.create!(percentage_discount: 25, quantity_threshold: 12, merchant_id: @merchant1.id)
+    @bulk_discount_2 = BulkDiscount.create!(percentage_discount: 10, quantity_threshold: 6, merchant_id: @merchant1.id)
     @bulk_discount_3 = BulkDiscount.create!(percentage_discount: 5, quantity_threshold: 2, merchant_id: @merchant2.id)
-    @bulk_discount_4 = BulkDiscount.create!(percentage_discount: 25, quantity_threshold: 10, merchant_id: @merchant2.id)
+    @bulk_discount_4 = BulkDiscount.create!(percentage_discount: 25, quantity_threshold: 12, merchant_id: @merchant2.id)
 
 
     @item_1 = Item.create!(name: "Shampoo", description: "This washes your hair", unit_price: 10, merchant_id: @merchant1.id, status: 1)
@@ -83,20 +83,41 @@ describe "merchant bulk discount index" do
     end
   end
 
-  it "I see a link to create a new discount" do
-    within('#create_discount') do
-      click_link("Create a New Discount")
-      expect(current_path).to eq("/merchant/#{@merchant1.id}/bulk_discounts/new")
+  it "I see a link to create a new discount and follow HAPPY PATH" do
+    click_link("Create a New Discount")
 
-      fill_in "Percentage Discount:", with: "15"
-      fill_in "Quantity Threshold", with: "5"
-      click_button "Create Discount"
+    expect(current_path).to eq("/merchant/#{@merchant1.id}/bulk_discounts/new")
 
-      expect(current_path).to eq("/merchant/#{@merchant1.id}/bulk_discounts")
-      within("#bulk_discounts") do
-        expect(page).to have_content("Percentage Discount: 15%")
-        expect(page).to have_content("Quantity Threshold: 5")
-      end
+    fill_in 'percentage_discount', with: 15
+    fill_in 'quantity_threshold', with: 5
+    click_button "Create Discount"
+
+    expect(current_path).to eq("/merchant/#{@merchant1.id}/bulk_discounts")
+    within("#bulk_discounts") do
+      expect(page).to have_content("Percentage Discount: 15%")
+      expect(page).to have_content("Quantity Threshold: 5")
     end
+  end
+
+  it "I see a link to create a new discount and follow SAD PATH" do
+    click_link("Create a New Discount")
+
+    expect(current_path).to eq("/merchant/#{@merchant1.id}/bulk_discounts/new")
+
+    fill_in 'quantity_threshold', with: "fifteen"
+    click_button "Create Discount"
+
+    expect(current_path).to eq("/merchant/#{@merchant1.id}/bulk_discounts/new")
+      expect(page).to have_content("Error: Invalid Input. Complete all forms.")
+  end
+
+  it "next to each bulk discount I see a link to delete it. When I click this linkI am redirected back to the bulk discounts index page and I no longer see the discount listed" do
+    within("#bulk_discount-#{@bulk_discount_1.id}") do
+      click_link("Delete This Discount")
+    end
+    expect(current_path).to eq("/merchant/#{@merchant1.id}/bulk_discounts")
+
+    expect(page).to_not have_content(@bulk_discount_1.percentage_discount)
+    expect(page).to_not have_content(@bulk_discount_1.quantity_threshold)
   end
 end

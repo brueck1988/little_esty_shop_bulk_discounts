@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   resources :merchant, only: [:show] do
     resources :dashboard, only: [:index]
     resources :items, except: [:destroy]
-    resources :bulk_discounts, only: [:index, :show, :new, :create]
+    resources :bulk_discounts, only: [:index, :show, :new, :create, :destroy]
     resources :item_status, only: [:update]
     resources :invoices, only: [:index, :show, :update]
   end

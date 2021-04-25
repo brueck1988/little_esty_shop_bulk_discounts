@@ -16,8 +16,17 @@ class BulkDiscountsController < ApplicationController
   def create
     @merchant = Merchant.find(params[:merchant_id])
     bulk_discount = @merchant.bulk_discounts.create(discount_params)
-    bulk_discount.save
-    redirect_to "/merchant/#{@merchant.id}/bulk_discounts"
+    if bulk_discount.save
+      redirect_to "/merchant/#{@merchant.id}/bulk_discounts"
+    else
+      flash[:notice] = "Error: Invalid Input. Complete all forms."
+      redirect_to "/merchant/#{@merchant.id}/bulk_discounts/new"
+    end
+  end
+
+  def destroy
+    BulkDiscount.destroy(params[:id])
+    redirect_to "/merchant/#{params[:merchant_id]}/bulk_discounts"
   end
 
   private
