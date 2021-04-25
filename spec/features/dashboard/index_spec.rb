@@ -29,6 +29,12 @@ RSpec.describe 'merchant dashboard' do
     @ii_3 = InvoiceItem.create!(invoice_id: @invoice_2.id, item_id: @item_3.id, quantity: 1, unit_price: 5, status: 2)
     @ii_4 = InvoiceItem.create!(invoice_id: @invoice_3.id, item_id: @item_4.id, quantity: 1, unit_price: 5, status: 1)
 
+    @ii_5 = InvoiceItem.create!(invoice_id: @invoice_4.id, item_id: @item_1.id, quantity: 1, unit_price: 10, status: 0)
+    @ii_6 = InvoiceItem.create!(invoice_id: @invoice_5.id, item_id: @item_2.id, quantity: 1, unit_price: 8, status: 0)
+    @ii_7 = InvoiceItem.create!(invoice_id: @invoice_6.id, item_id: @item_3.id, quantity: 1, unit_price: 5, status: 2)
+    @ii_8 = InvoiceItem.create!(invoice_id: @invoice_7.id, item_id: @item_4.id, quantity: 1, unit_price: 5, status: 1)
+
+
     @transaction1 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_1.id)
     @transaction2 = Transaction.create!(credit_card_number: 230948, result: 1, invoice_id: @invoice_3.id)
     @transaction3 = Transaction.create!(credit_card_number: 234092, result: 1, invoice_id: @invoice_4.id)
@@ -64,31 +70,32 @@ RSpec.describe 'merchant dashboard' do
     within("#customer-#{@customer_1.id}") do
       expect(page).to have_content(@customer_1.first_name)
       expect(page).to have_content(@customer_1.last_name)
-      expect(page).to have_content(2)
+      expect(page).to have_content(3)#2
     end
     within("#customer-#{@customer_2.id}") do
       expect(page).to have_content(@customer_2.first_name)
       expect(page).to have_content(@customer_2.last_name)
-      expect(page).to have_content(1)
+      expect(page).to have_content(1)#1
     end
     within("#customer-#{@customer_3.id}") do
       expect(page).to have_content(@customer_3.first_name)
       expect(page).to have_content(@customer_3.last_name)
-      expect(page).to have_content(1)
+      expect(page).to have_content(1)#1
     end
     within("#customer-#{@customer_4.id}") do
       expect(page).to have_content(@customer_4.first_name)
       expect(page).to have_content(@customer_4.last_name)
-      expect(page).to have_content(1)
+      expect(page).to have_content(1)#1
     end
     within("#customer-#{@customer_5.id}") do
       expect(page).to have_content(@customer_5.first_name)
       expect(page).to have_content(@customer_5.last_name)
-      expect(page).to have_content(1)
+      expect(page).to have_content(1)#1
     end
     expect(page).to have_no_content(@customer_6.first_name)
     expect(page).to have_no_content(@customer_6.last_name)
   end
+
   it "can see a section for Items Ready to Ship with list of names of items ordered and ids" do
     within("#items_ready_to_ship") do
 
@@ -104,9 +111,9 @@ RSpec.describe 'merchant dashboard' do
   end
 
   it "each invoice id is a link to my merchant's invoice show page " do
-    expect(page).to have_link(@item_1.invoice_ids)
-    expect(page).to have_link(@item_2.invoice_ids)
-    expect(page).to_not have_link(@item_3.invoice_ids)
+    expect(page).to have_link("#{@item_1.invoice_ids}")
+    expect(page).to have_link("#{@item_2.invoice_ids}")
+    expect(page).to_not have_link("#{@item_3.invoice_ids}")
 
     click_link("#{@item_1.invoice_ids}", match: :first)
     expect(current_path).to eq("/merchant/#{@merchant1.id}/invoices/#{@invoice_1.id}")
@@ -114,5 +121,11 @@ RSpec.describe 'merchant dashboard' do
 
   it "shows the date that the invoice was created in this format: Monday, July 18, 2019" do
     expect(page).to have_content(@invoice_1.created_at.strftime("%A, %B %-d, %Y"))
+  end
+
+  it 'shows a link to all my discounts' do
+    expect(page).to have_link("My Discounts")
+    click_link("My Discounts")
+    expect(current_path).to eq("/merchant/#{@merchant1.id}/bulk_discounts")
   end
 end

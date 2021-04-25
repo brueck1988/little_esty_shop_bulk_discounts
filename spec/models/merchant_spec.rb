@@ -4,13 +4,14 @@ describe Merchant do
   describe "validations" do
     it { should validate_presence_of :name }
   end
+  
   describe "relationships" do
+    it { should have_many :bulk_discounts }
     it { should have_many :items }
     it { should have_many(:invoice_items).through(:items) }
-    it {should have_many(:invoices).through(:invoice_items)}
+    it { should have_many(:invoices).through(:invoice_items) }
     it { should have_many(:customers).through(:invoices) }
     it { should have_many(:transactions).through(:invoices) }
-
   end
 
   describe "instance methods" do
@@ -52,13 +53,23 @@ describe Merchant do
       @ii_8 = InvoiceItem.create!(invoice_id: @invoice_7.id, item_id: @item_8.id, quantity: 1, unit_price: 5, status: 1, created_at: "2012-04-03 14:54:09")
       @ii_9 = InvoiceItem.create!(invoice_id: @invoice_7.id, item_id: @item_4.id, quantity: 1, unit_price: 1, status: 1, created_at: "2012-04-04 14:54:09")
 
-      @transaction1 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_1.id)
-      @transaction2 = Transaction.create!(credit_card_number: 230948, result: 1, invoice_id: @invoice_2.id)
-      @transaction3 = Transaction.create!(credit_card_number: 234092, result: 1, invoice_id: @invoice_3.id)
-      @transaction4 = Transaction.create!(credit_card_number: 230429, result: 1, invoice_id: @invoice_4.id)
-      @transaction5 = Transaction.create!(credit_card_number: 102938, result: 1, invoice_id: @invoice_5.id)
-      @transaction6 = Transaction.create!(credit_card_number: 879799, result: 0, invoice_id: @invoice_6.id)
-      @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_7.id)
+      @transaction1 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_1.id)#customer 1
+      @transaction2 = Transaction.create!(credit_card_number: 230948, result: 1, invoice_id: @invoice_2.id)#customer 1
+      @transaction3 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_1.id)#customer 1
+      @transaction4 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_2.id)#customer 1
+      @transaction5 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_2.id)#customer 1
+      @transaction6 = Transaction.create!(credit_card_number: 234092, result: 1, invoice_id: @invoice_3.id)#customer 2
+      @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_3.id)#customer 2
+      @transaction8 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_3.id)#customer 2
+      @transaction9 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_3.id)#customer 2
+      @transaction10 = Transaction.create!(credit_card_number: 230429, result: 1, invoice_id: @invoice_5.id)#customer 4
+      @transaction11 = Transaction.create!(credit_card_number: 230429, result: 1, invoice_id: @invoice_5.id)#customer 4
+      @transaction12 = Transaction.create!(credit_card_number: 102938, result: 1, invoice_id: @invoice_5.id)#customer 4
+      @transaction13 = Transaction.create!(credit_card_number: 102938, result: 1, invoice_id: @invoice_4.id)#customer 3
+      @transaction14 = Transaction.create!(credit_card_number: 102938, result: 1, invoice_id: @invoice_4.id)#customer 3
+      @transaction15 = Transaction.create!(credit_card_number: 879799, result: 0, invoice_id: @invoice_6.id)#invalid transaction
+      @transaction16 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_7.id)#customer 6
+
 
     end
     it "can list items ready to ship" do
@@ -68,7 +79,7 @@ describe Merchant do
       expected = @merchant1.favorite_customers.map do |customer|
         customer[:first_name]
       end
-      expect(expected).to eq([@customer_1.first_name, @customer_2.first_name, @customer_3.first_name, @customer_4.first_name, @customer_6.first_name])
+      expect(expected).to eq([@customer_1.first_name, @customer_2.first_name, @customer_4.first_name, @customer_3.first_name, @customer_6.first_name])
     end
 
     it "top_5_items" do
