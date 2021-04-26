@@ -10,6 +10,11 @@
 </div>
 <body>
 
+
+  <section id='edit_discount'>
+  <p><%=link_to "Edit This Discount", "/merchant/#{@merchant.id}/bulk_discounts/#{@bulk_discount.id}/edit"%></p>
+  </section>
+
   <section id='bulk_discount'>
   <h4 >Bulk Discount Details:</h4>
   <p> <%= @merchant.name %>:</p>
