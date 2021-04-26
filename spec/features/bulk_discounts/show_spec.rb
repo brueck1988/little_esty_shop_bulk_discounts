@@ -63,4 +63,34 @@ describe "merchant bulk discount show page" do
     expect(page).to have_content("Percentage Discount: #{@bulk_discount_1.percentage_discount}%")
     expect(page).to have_content("Quantity Threshold: #{@bulk_discount_1.quantity_threshold} items")
   end
+
+  describe "shows a link to edit the bulk discount. When I click this link I am taken to the edit discount page" do
+    describe "And I see that the discounts current attributes are pre-poluated in the form When I change any/all of the information" do
+      it "HAPPY PATH --and click submit Then I am redirected to the bulk discount's show page And I see that the discount's attributes have been updated" do
+        click_link("Edit This Discount")
+        expect(current_path).to eq("/merchant/#{@merchant1.id}/bulk_discounts/#{@bulk_discount_1.id}/edit")
+        expect(find_field('percentage_discount').value).to have_content(@bulk_discount_1.percentage_discount)
+        expect(find_field('quantity_threshold').value).to have_content(@bulk_discount_1.quantity_threshold)
+
+        fill_in 'percentage_discount', with: 15
+        fill_in 'quantity_threshold', with: 5
+        click_button "Update Discount"
+
+        expect(current_path).to eq("/merchant/#{@merchant1.id}/bulk_discounts/#{@bulk_discount_1.id}")
+        expect(page).to have_content("Percentage Discount: 15%")
+        expect(page).to have_content("Quantity Threshold: 5 items")
+      end
+
+      it "SAD PATH --and click submit Then I am redirected to the bulk discount's show page And I see that the discount's attributes have been updated" do
+        click_link("Edit This Discount")
+        expect(current_path).to eq("/merchant/#{@merchant1.id}/bulk_discounts/#{@bulk_discount_1.id}/edit")
+        fill_in 'percentage_discount', with: ""
+        fill_in 'quantity_threshold', with: ""
+        click_button "Update Discount"
+
+        expect(current_path).to eq("/merchant/#{@merchant1.id}/bulk_discounts/#{@bulk_discount_1.id}/edit")
+        expect(page).to have_content("Error: Invalid Input. Complete all forms.")
+      end
+    end
+  end
 end

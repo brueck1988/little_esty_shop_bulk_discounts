@@ -30,6 +30,22 @@ class BulkDiscountsController < ApplicationController
     redirect_to "/merchant/#{params[:merchant_id]}/bulk_discounts"
   end
 
+  def edit
+    @merchant = Merchant.find(params[:merchant_id])
+    @bulk_discount = BulkDiscount.find(params[:id])
+  end
+
+  def update
+    merchant = Merchant.find(params[:merchant_id])
+    bulk_discount = BulkDiscount.find(params[:id])
+    if bulk_discount.update(discount_params)
+      redirect_to "/merchant/#{merchant.id}/bulk_discounts/#{bulk_discount.id}"
+    else
+      flash[:notice] = "Error: Invalid Input. Complete all forms."
+      redirect_to "/merchant/#{merchant.id}/bulk_discounts/#{bulk_discount.id}/edit"
+    end
+  end
+
   private
   def discount_params
     params.permit(:percentage_discount, :quantity_threshold)
