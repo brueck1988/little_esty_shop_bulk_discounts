@@ -24,7 +24,7 @@ RSpec.describe Invoice, type: :model do
       expect(invoice_1.total_revenue).to eq(100)
     end
 
-    it "total_revenue_with_bulk_discounts" do
+    xit "total_revenue_with_bulk_discounts" do
       @merchant1 = Merchant.create!(name: 'Hair Care')
       @merchant2 = Merchant.create!(name: 'Jewelry')
 
