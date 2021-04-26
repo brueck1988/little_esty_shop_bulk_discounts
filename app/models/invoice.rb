@@ -16,8 +16,9 @@ class Invoice < ApplicationRecord
   end
 
   def total_revenue_with_bulk_discounts
+    require "pry";binding.pry
     discounted_revenue = Invoice.joins(:bulk_discounts).where("bulk_discounts.quantity_threshold <= invoice_items.quantity").sum("invoice_items.unit_price * invoice_items.quantity * bulk_discounts.percentage_discount / 100")
-    undiscounted_revenue = Invoice.joins(:bulk_discounts).where("bulk_discounts.quantity_threshold < invoice_items.quantity").sum("invoice_items.unit_price * invoice_items.quantity")
+    undiscounted_revenue = Invoice.joins(:bulk_discounts).where("bulk_discounts.quantity_threshold > invoice_items.quantity").sum("invoice_items.unit_price * invoice_items.quantity")
     discounted_revenue + undiscounted_revenue
     #Invoice.joins(:bulk_discounts).where("invoice.status = 2 AND bulk_discounts.quantity_threshold <= invoice_items.quantity").sum("(invoice_items.unit_price * invoice_items.quantity) * (bulk_discounts.discount/100)")
   end

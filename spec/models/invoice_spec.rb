@@ -24,12 +24,12 @@ RSpec.describe Invoice, type: :model do
       expect(invoice_1.total_revenue).to eq(100)
     end
 
-    xit "total_revenue_with_bulk_discounts" do
+    it "total_revenue_with_bulk_discounts" do
       @merchant1 = Merchant.create!(name: 'Hair Care')
       @merchant2 = Merchant.create!(name: 'Jewelry')
 
-      @bulk_discount_1 = BulkDiscount.create!(percentage_discount: 25, quantity_threshold: 12, merchant_id: @merchant1.id)
-      @bulk_discount_2 = BulkDiscount.create!(percentage_discount: 10, quantity_threshold: 6, merchant_id: @merchant1.id)
+      @bulk_discount_1 = BulkDiscount.create!(percentage_discount: 25, quantity_threshold: 9, merchant_id: @merchant1.id)
+      @bulk_discount_2 = BulkDiscount.create!(percentage_discount: 10, quantity_threshold: 4, merchant_id: @merchant1.id)
       @bulk_discount_3 = BulkDiscount.create!(percentage_discount: 5, quantity_threshold: 2, merchant_id: @merchant2.id)
       @bulk_discount_4 = BulkDiscount.create!(percentage_discount: 25, quantity_threshold: 12, merchant_id: @merchant2.id)
 
@@ -60,9 +60,9 @@ RSpec.describe Invoice, type: :model do
       @invoice_6 = Invoice.create!(customer_id: @customer_5.id, status: 2)
       @invoice_7 = Invoice.create!(customer_id: @customer_6.id, status: 2)
 
-      @ii_1 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_1.id, quantity: 11, unit_price: 1000, status: 0)
-      @ii_2 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_1.id, quantity: 5, unit_price: 10, status: 0)
-      @ii_3 = InvoiceItem.create!(invoice_id: @invoice_3.id, item_id: @item_2.id, quantity: 2, unit_price: 8, status: 2)
+      @ii_1 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_1.id, quantity: 10, unit_price: 1000, status: 0)
+      @ii_2 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_2.id, quantity: 5, unit_price: 10, status: 0)
+      @ii_3 = InvoiceItem.create!(invoice_id: @invoice_3.id, item_id: @item_3.id, quantity: 2, unit_price: 8, status: 2)
       @ii_4 = InvoiceItem.create!(invoice_id: @invoice_4.id, item_id: @item_3.id, quantity: 3, unit_price: 5, status: 1)
       @ii_6 = InvoiceItem.create!(invoice_id: @invoice_5.id, item_id: @item_4.id, quantity: 1, unit_price: 1, status: 1)
       @ii_7 = InvoiceItem.create!(invoice_id: @invoice_6.id, item_id: @item_7.id, quantity: 1, unit_price: 3, status: 1)
