@@ -16,11 +16,19 @@ class Invoice < ApplicationRecord
   end
 
   def total_revenue_with_bulk_discounts
-    require "pry";binding.pry
-    discounted_revenue = Invoice.joins(:bulk_discounts).where("bulk_discounts.quantity_threshold <= invoice_items.quantity").sum("invoice_items.unit_price * invoice_items.quantity * bulk_discounts.percentage_discount / 100")
-    undiscounted_revenue = Invoice.joins(:bulk_discounts).where("bulk_discounts.quantity_threshold > invoice_items.quantity").sum("invoice_items.unit_price * invoice_items.quantity")
-    discounted_revenue + undiscounted_revenue
-    #Invoice.joins(:bulk_discounts).where("invoice.status = 2 AND bulk_discounts.quantity_threshold <= invoice_items.quantity").sum("(invoice_items.unit_price * invoice_items.quantity) * (bulk_discounts.discount/100)")
+    # # discounted_revenue = Invoice.joins(:bulk_discounts).where("bulk_discounts.quantity_threshold <= invoice_items.quantity").group('bulk_discounts.id').maximum(:bulk_discounts.percentage_discount).sum("invoice_items.unit_price * invoice_items.quantity * bulk_discounts.percentage_discount / 100")
+    # # undiscounted_revenue = Invoice.joins(:bulk_discounts).where("bulk_discounts.quantity_threshold > invoice_items.quantity").sum("invoice_items.unit_price * invoice_items.quantity")
+    # # total = discounted_revenue + undiscounted_revenue
+    # #.sum("bulk_discounts.percentage_discount.to_f / 100")
+    # #.select('bulk_discounts.percentage_discount', 'invoice_items.quantity', 'invoice_items.unit_price')
+    # ##.select('invoice_items.*', 'bulk_discounts.id', 'bulk_discounts.quantity_threshold', 'bulk_discounts.percentage_discount as percent')
+    # require "pry";binding.pry
+    # max_percentage_per_quantity_threshold = Invoice.joins(:bulk_discounts).where("bulk_discounts.quantity_threshold <= invoice_items.quantity").select('invoice_items.*', 'bulk_discounts.id', 'bulk_discounts.quantity_threshold', 'bulk_discounts.percentage_discount as percent').group('bulk_discounts.quantity_threshold').sum("(1 - max(bulk_discounts.percentage_discount) / 100) * invoice_items.unit_price * invoice_items.quantity")
+    # #Invoice.joins(:bulk_discounts).where("bulk_discounts.quantity_threshold <= invoice_items.quantity").select('invoice_items.*', 'bulk_discounts.id', 'bulk_discounts.quantity_threshold', 'bulk_discounts.percentage_discount').group('bulk_discounts.quantity_threshold').sum("(1 - 'MAX bulk_discounts.percentage_discount' * invoice_items.unit_price * invoice_items.quantity")
+    # discounted_revenue = Invoice.joins(:bulk_discounts).where("bulk_discounts.quantity_threshold <= invoice_items.quantity").sum("(1 - bulk_discounts.percentage_discount / 100) * invoice_items.unit_price * invoice_items.quantity")
+    # undiscounted_revenue = Invoice.joins(:bulk_discounts).where("bulk_discounts.quantity_threshold > invoice_items.quantity").sum("invoice_items.unit_price * invoice_items.quantity")
+    # #total = discounted_revenue + undiscounted_revenue
+    10
   end
 
   def highest_discount
