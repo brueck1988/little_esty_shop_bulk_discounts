@@ -18,8 +18,14 @@ class InvoiceItem < ApplicationRecord
   end
 
   def applied_discount
-    item.merchant.bulk_discounts.order(:percentage_discount)
+    item.merchant.bulk_discounts
+        .order(percentage_discount: :desc)
         .where("quantity_threshold <= ?", self.quantity)
-        .last
+        .limit(1)
+        .first
+  end
+
+  def applicable_discount?
+    !self.applied_discount.nil? && self.applied_discount
   end
 end
