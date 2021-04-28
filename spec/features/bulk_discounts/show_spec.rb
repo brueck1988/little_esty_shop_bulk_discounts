@@ -38,13 +38,13 @@ describe "merchant bulk discount show page" do
     @invoice_7 = Invoice.create!(customer_id: @customer_6.id, status: 2)
 
     @ii_1 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_1.id, quantity: 9, unit_price: 10, status: 0)
-    @ii_2 = InvoiceItem.create!(invoice_id: @invoice_2.id, item_id: @item_1.id, quantity: 1, unit_price: 10, status: 0)
-    @ii_3 = InvoiceItem.create!(invoice_id: @invoice_3.id, item_id: @item_2.id, quantity: 2, unit_price: 8, status: 2)
-    @ii_4 = InvoiceItem.create!(invoice_id: @invoice_4.id, item_id: @item_3.id, quantity: 3, unit_price: 5, status: 1)
-    @ii_6 = InvoiceItem.create!(invoice_id: @invoice_5.id, item_id: @item_4.id, quantity: 1, unit_price: 1, status: 1)
-    @ii_7 = InvoiceItem.create!(invoice_id: @invoice_6.id, item_id: @item_7.id, quantity: 1, unit_price: 3, status: 1)
-    @ii_8 = InvoiceItem.create!(invoice_id: @invoice_7.id, item_id: @item_8.id, quantity: 1, unit_price: 5, status: 1)
-    @ii_9 = InvoiceItem.create!(invoice_id: @invoice_7.id, item_id: @item_4.id, quantity: 1, unit_price: 1, status: 1)
+    @ii_2 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_1.id, quantity: 1, unit_price: 10, status: 0)
+    @ii_3 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_2.id, quantity: 2, unit_price: 8, status: 2)
+    @ii_4 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_3.id, quantity: 3, unit_price: 5, status: 1)
+    @ii_6 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_4.id, quantity: 1, unit_price: 1, status: 1)
+    @ii_7 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_7.id, quantity: 1, unit_price: 3, status: 1)
+    @ii_8 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_8.id, quantity: 1, unit_price: 5, status: 1)
+    @ii_9 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_4.id, quantity: 1, unit_price: 1, status: 1)
 
     @transaction1 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_1.id)
     @transaction2 = Transaction.create!(credit_card_number: 230948, result: 1, invoice_id: @invoice_2.id)
@@ -92,10 +92,5 @@ describe "merchant bulk discount show page" do
         expect(page).to have_content("Error: Invalid Input. Complete all forms.")
       end
     end
-  end
-
-  it "shows the total revenue with bulk discounts for this invoice" do
-
-    expect(page).to have_content(@invoice_1.total_revenue_with_bulk_discounts)
   end
 end

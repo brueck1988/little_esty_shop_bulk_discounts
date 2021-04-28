@@ -97,12 +97,18 @@ RSpec.describe 'invoices show' do
   end
 
   it "shows the total revenue with bulk discounts for this invoice" do
-
-    expect(page).to have_content(@invoice_1.total_revenue_with_bulk_discounts)
+    within('#total_revenue_with_bulk_discounts') do
+      expect(page).to have_content(@invoice_1.total_revenue_with_bulk_discounts)
+    end
   end
 
   it "Next to each invoice item I see a link to the show page for the bulk discount that was applied" do
       expect(page).to have_link("#{@bulk_discount_1.id}")
-    end
+  end
 
+  it "shows the total revenue with bulk discounts for this invoice" do
+    within('#total_revenue_with_bulk_discounts') do
+      expect(page).to have_content(@invoice_1.total_revenue_with_bulk_discounts)
+    end
+  end
 end
