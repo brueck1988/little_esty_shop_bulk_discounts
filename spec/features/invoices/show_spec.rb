@@ -96,4 +96,8 @@ RSpec.describe 'invoices show' do
      end
   end
 
+  it "Next to each invoice item I see a link to the show page for the bulk discount that was applied" do
+      expect(page).to have_link("#{@bulk_discount_1}")
+    end
+
 end
