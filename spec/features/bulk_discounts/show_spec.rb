@@ -93,4 +93,9 @@ describe "merchant bulk discount show page" do
       end
     end
   end
+
+  it "shows the total revenue with bulk discounts for this invoice" do
+
+    expect(page).to have_content(@invoice_1.total_revenue_with_bulk_discounts)
+  end
 end

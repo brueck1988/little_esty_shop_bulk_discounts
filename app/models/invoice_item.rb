@@ -21,6 +21,5 @@ class InvoiceItem < ApplicationRecord
     item.merchant.bulk_discounts.order(:percentage_discount)
         .where("quantity_threshold <= ?", self.quantity)
         .last
-        .id
   end
 end

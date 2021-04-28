@@ -61,7 +61,7 @@ RSpec.describe InvoiceItem, type: :model do
         transaction6 = Transaction.create!(credit_card_number: 879799, result: 0, invoice_id: invoice_6.id)
         transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: invoice_7.id)
 
-        expect(ii_1.applied_discount).to eq(bulk_discount_1.id)
+        expect(ii_1.applied_discount).to eq(bulk_discount_1)
       end
     end
   end
