@@ -4,10 +4,10 @@ describe Merchant do
   describe "validations" do
     it { should validate_presence_of :name }
   end
-  
+
   describe "relationships" do
-    it { should have_many :bulk_discounts }
     it { should have_many :items }
+    it { should have_many :bulk_discounts }
     it { should have_many(:invoice_items).through(:items) }
     it { should have_many(:invoices).through(:invoice_items) }
     it { should have_many(:customers).through(:invoices) }
@@ -69,8 +69,6 @@ describe Merchant do
       @transaction14 = Transaction.create!(credit_card_number: 102938, result: 1, invoice_id: @invoice_4.id)#customer 3
       @transaction15 = Transaction.create!(credit_card_number: 879799, result: 0, invoice_id: @invoice_6.id)#invalid transaction
       @transaction16 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_7.id)#customer 6
-
-
     end
     it "can list items ready to ship" do
       expect(@merchant1.ordered_items_to_ship).to eq([@item_1, @item_1, @item_3, @item_4, @item_7, @item_8, @item_4])
